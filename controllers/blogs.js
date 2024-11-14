@@ -51,7 +51,7 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response, next) 
   }
 })
 
-blogsRouter.put('/:id', (request, response, next) => {
+blogsRouter.put('/:id', middleware.userExtractor, (request, response, next) => {
   const {
     title,
     author,
@@ -61,7 +61,7 @@ blogsRouter.put('/:id', (request, response, next) => {
 
   Blog.findByIdAndUpdate(
     request.params.id,
-    { title, author, url, likes },
+    { title, author, url, likes, user: request.user.id },
     { new: true, runValidators: true, context: 'query' }
   )
     .then(updatedBlog => {
